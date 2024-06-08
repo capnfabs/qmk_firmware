@@ -32,5 +32,7 @@
     "clangd.arguments": [
         "--header-insertion=never"
     ],
-    "editor.fontFamily": "Menlo, Monaco, 'Courier New', monospace"
+    "editor.fontFamily": "'JetBrains Mono', Menlo, Monaco, 'Courier New', monospace",
+    "cmake.configureOnOpen": true,
+    "editor.fontLigatures": false
 }
