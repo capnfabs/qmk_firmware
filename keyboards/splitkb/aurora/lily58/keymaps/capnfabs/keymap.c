@@ -17,6 +17,9 @@ enum custom_keycodes {
   OLED_UP = SAFE_RANGE,
   OLED_DOWN,
   SWITCH_DEFAULT_LAYOUT,
+  // Cycles through FN layers; if you've actually _used_ the layer it clears
+  // back to the default state though.
+  SWITCH_FN_LAYER,
 };
 
 const char PROGMEM qwerty_logo[] = {
@@ -138,32 +141,32 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		KC_ESC,		KC_1,	KC_2,	KC_3,	KC_4,	KC_5,					KC_6,		KC_7,	KC_8,		KC_9,	KC_0,		KC_MINS,
 		KC_TAB,		KC_Q,	KC_W, 	KC_E, 	KC_R, 	KC_T,					KC_Y,		KC_U,	KC_I,		KC_O,	KC_P,		KC_EQL,
 		MO(_FUNCTION),		KC_A,	KC_S,	KC_D,	KC_F,	KC_G,					KC_H,		KC_J,	KC_K,		KC_L,	KC_SCLN,	KC_ENT,
-		KC_LSFT,	KC_Z,	KC_X,	KC_C,	KC_V,	KC_B,	KC_GRV,KC_NO,	KC_N, 		KC_M, 	KC_COMM,	KC_DOT,	KC_LBRC,	KC_RBRC,
-								KC_LCTL, KC_LALT, KC_LGUI,	KC_SPC,KC_SPC,	KC_QUOT, KC_SLSH,	KC_BSLS),
+		KC_LSFT,	KC_Z,	KC_X,	KC_C,	KC_V,	KC_B,	KC_GRV,SWITCH_FN_LAYER,	KC_N, 		KC_M, 	KC_COMM,	KC_DOT,	KC_LBRC,	KC_RBRC,
+								KC_LCTL, KC_LALT, KC_LGUI,	KC_SPC,KC_SPC,	LT(_FUNCTION, KC_QUOT), KC_SLSH,	KC_BSLS),
     [_COLEMAK] = LAYOUT(
 		KC_ESC,		KC_1,	KC_2,	KC_3,	KC_4,	KC_5,					KC_6,		KC_7,	KC_8,		KC_9,	KC_0,		KC_MINS,
 		KC_TAB,		KC_Q,	KC_W, 	KC_F, 	KC_P, 	KC_G,					KC_J,		KC_L,	KC_U,		KC_Y,	KC_SCLN,	KC_EQL,
 		MO(_FUNCTION),		KC_A,	KC_R,	KC_S,	KC_T,	KC_D,					KC_H,		KC_N,	KC_E,		KC_I,	KC_O,	KC_ENT,
-		KC_LSFT,	KC_Z,	KC_X,	KC_C,	KC_V,	KC_B,	KC_GRV,KC_NO,	KC_K, 		KC_M, 	KC_COMM,	KC_DOT,	KC_LBRC,	KC_RBRC,
-								KC_LCTL, KC_LALT, KC_LGUI,	KC_SPC,KC_SPC,	KC_QUOT, KC_SLSH,	KC_BSLS),
+		KC_LSFT,	KC_Z,	KC_X,	KC_C,	KC_V,	KC_B,	KC_GRV,SWITCH_FN_LAYER,	KC_K, 		KC_M, 	KC_COMM,	KC_DOT,	KC_LBRC,	KC_RBRC,
+								KC_LCTL, KC_LALT, KC_LGUI,	KC_SPC,KC_SPC,	LT(_FUNCTION, KC_QUOT), KC_SLSH,	KC_BSLS),
     [_CURSED_COLEMAK_TRANSPOSED] = LAYOUT(
 		KC_ESC,		KC_1,	KC_2,	KC_3,	KC_4,	KC_5,					KC_6,		KC_7,	KC_8,		KC_9,	KC_0,		KC_MINS,
 		KC_TAB,		KC_Q,	KC_W, 	KC_K, 	KC_S, 	KC_F,					KC_O,		KC_I,	KC_L,		KC_SCLN,	KC_R,		KC_EQL,
 		MO(_FUNCTION),		KC_A,	KC_D,	KC_G,	KC_E,	KC_T,					KC_H,		KC_Y,	KC_N,		KC_U,	KC_P,	KC_ENT,
-		KC_LSFT,	KC_Z,	KC_X,	KC_C,	KC_V,	KC_B,	KC_GRV,KC_NO,	KC_J, 		KC_M, 	KC_COMM,	KC_DOT,	KC_LBRC,	KC_RBRC,
-								KC_LCTL, KC_LALT, KC_LGUI,	KC_SPC,KC_SPC,	KC_QUOT, KC_SLSH,	KC_BSLS),
+		KC_LSFT,	KC_Z,	KC_X,	KC_C,	KC_V,	KC_B,	KC_GRV,SWITCH_FN_LAYER,	KC_J, 		KC_M, 	KC_COMM,	KC_DOT,	KC_LBRC,	KC_RBRC,
+								KC_LCTL, KC_LALT, KC_LGUI,	KC_SPC,KC_SPC,	LT(_FUNCTION, KC_QUOT), KC_SLSH,	KC_BSLS),
 	[_FUNCTION] = LAYOUT(
-		_______, KC_F1,	KC_F2, KC_F3, KC_F4, KC_F5,			 KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11,
-		XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_UP, XXXXXXX, XXXXXXX, KC_F12,
-		_______, KC_LSFT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_LEFT, KC_DOWN, KC_RIGHT, XXXXXXX, XXXXXXX,
-		_______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, SWITCH_DEFAULT_LAYOUT, TG(_KEYBOAD_SETTINGS), XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+		KC_PWR, KC_F1,	KC_F2, KC_F3, KC_F4, KC_F5,			 KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11,
+		XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLU, XXXXXXX, XXXXXXX, KC_UP, XXXXXXX, XXXXXXX, KC_F12,
+		_______, KC_LSFT, KC_LSFT, XXXXXXX, XXXXXXX, KC_VOLD, XXXXXXX, KC_LEFT, KC_DOWN, KC_RIGHT, XXXXXXX, _______,
+		_______, XXXXXXX, G(KC_LBRC), G(KC_RBRC), XXXXXXX, XXXXXXX, SWITCH_DEFAULT_LAYOUT, SWITCH_FN_LAYER, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
 						_______, _______, _______, KC_BSPC, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX),
 	[_KEYBOAD_SETTINGS] = LAYOUT(
 		TG(_KEYBOAD_SETTINGS),	XXXXXXX,XXXXXXX,XXXXXXX, XXXXXXX, XXXXXXX,						OLED_UP, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
 		XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,					OLED_DOWN, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
 		XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, 					XXXXXXX, XXXXXXX, XXXXXXX, RGB_HUI, RGB_SAI, RGB_VAI,
-		XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, RGB_TOG, XXXXXXX, XXXXXXX, XXXXXXX, RGB_HUD, RGB_SAD, RGB_VAD,
-		_______, _______, _______, _______, _______, RGB_SPD, RGB_SPI, XXXXXXX)
+		XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, SWITCH_FN_LAYER, XXXXXXX, XXXXXXX, XXXXXXX, RGB_HUD, RGB_SAD, RGB_VAD,
+		_______, _______, _______, _______, _______, RGB_SPD, RGB_SPI, RGB_TOG)
 };
 
 void keyboard_pre_init_user(void) {
@@ -191,6 +194,10 @@ HSV shift_hue_for_keycode(HSV hsv, uint16_t keycode) {
         newHsv.s = 0;
     } else if (keycode == RGB_VAI  || keycode == RGB_VAD) {
         newHsv.h += DEG_TO_BYTE(60);
+    } else if (keycode == KC_VOLU || keycode == KC_VOLD) {
+        newHsv.h += DEG_TO_BYTE(30);
+    } else if (keycode == G(KC_LBRC) || keycode == G(KC_RBRC)) {
+        newHsv.h -= DEG_TO_BYTE(30);
     }
     else if (keycode > KC_TRNS) {
         // theme color
@@ -277,6 +284,33 @@ void cycle_next_default_layer(void) {
     default_layer_set(1 << next_layer);
 }
 
+bool has_pressed_between_layers = false;
+
+void cycle_next_fn_layer(void) {
+    uint16_t highest_layer = get_highest_layer(layer_state);
+
+    if (has_pressed_between_layers) {
+        has_pressed_between_layers = false;
+        layer_clear();
+        return;
+    }
+
+    // if we're cycling restart the has_pressed_between_layers regardless of
+    // what it was before.
+    has_pressed_between_layers = false;
+    if (!highest_layer) {
+        layer_move(_FUNCTION);
+    } else if (highest_layer == _FUNCTION) {
+        layer_move(_KEYBOAD_SETTINGS);
+    } else if (highest_layer == _KEYBOAD_SETTINGS) {
+        // back to default
+        layer_clear();
+    } else {
+        // should never happen but here's an escape hatch
+        layer_clear();
+    }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case OLED_UP:
@@ -296,8 +330,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         cycle_next_default_layer();
       }
       return false; // Skip all further processing
+    case SWITCH_FN_LAYER:
+        // this is janky if you've got the left layer key held down when you
+        // press it, it exits the layer. Might need to check how the layer code
+        // works on release.
+        if (record->event.pressed) {
+            cycle_next_fn_layer();
+        }
+        return false;
     default:
-      return true; // Process all other keycodes normally
+        if (record->event.pressed) {
+            has_pressed_between_layers = true;
+        }
+        return true; // Process all other keycodes normally
   }
 }
 
