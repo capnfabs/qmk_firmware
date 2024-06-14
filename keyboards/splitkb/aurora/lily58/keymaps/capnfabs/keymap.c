@@ -22,6 +22,15 @@ enum custom_keycodes {
   SWITCH_FN_LAYER,
 };
 
+typedef union {
+  uint32_t raw;
+  struct {
+    uint8_t oled_brightness :8;
+  };
+} user_config_t;
+
+user_config_t user_config;
+
 const char PROGMEM qwerty_logo[] = {
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -237,15 +246,20 @@ synced_config_t g_synced_config = {
     .oled_brightness = 255
 };
 
-void oled_set_brightness_split(uint8_t brightness) {
-    if (g_synced_config.oled_brightness == brightness) {
-        return;
-    }
+void oled_set_brightness_split_noeeprom(uint8_t brightness) {
     g_synced_config.oled_brightness = brightness;
     oled_set_brightness(brightness);
-    // TODO save value into eeprom
-    // https://docs.qmk.fm/feature_eeprom#persistent-configuration-eeprom
-    // https://docs.qmk.fm/custom_quantum_functions#keyboard-initialization-code
+}
+
+void oled_set_brightness_split(uint8_t brightness) {
+    if (user_config.oled_brightness == brightness) {
+        return;
+    }
+
+    user_config.oled_brightness = brightness;
+    eeconfig_update_user(user_config.raw);
+
+    oled_set_brightness_split_noeeprom(user_config.oled_brightness);
 }
 
 void housekeeping_task_user(void) {
@@ -354,6 +368,9 @@ void user_synced_config_handler(uint8_t in_buflen, const void* in_data, uint8_t 
 void keyboard_post_init_user(void) {
     transaction_register_rpc(USER_SYNC_KEEB_PARAMS, user_synced_config_handler);
     rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_sick_tricks);
+
+    user_config.raw = eeconfig_read_user();
+    oled_set_brightness_split_noeeprom(user_config.oled_brightness);
 }
 
 void user_render_layer_state(void) {
@@ -484,4 +501,12 @@ bool oled_task_user(void) {
   } else {
     return draw_oled_secondary();
   }
+}
+
+void eeconfig_init_user(void) {  // EEPROM is getting reset!
+  user_config.raw = 0;
+  user_config.oled_brightness = 255; // Max brightness by default
+  eeconfig_update_user(user_config.raw); // Write default value to EEPROM now
+
+  oled_set_brightness_split_noeeprom(user_config.oled_brightness);
 }
